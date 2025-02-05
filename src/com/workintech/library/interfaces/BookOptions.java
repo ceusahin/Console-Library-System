@@ -1,9 +1,8 @@
 package com.workintech.library.interfaces;
 
-import com.workintech.library.models.Author;
-import com.workintech.library.models.Member;
+import com.workintech.library.entities.Member;
 
 public interface BookOptions {
-    void borrowItem(Member user);
-    void returnItem();
+    void borrowBook(Member user);
+    void returnBook();
 }

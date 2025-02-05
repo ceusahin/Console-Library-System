@@ -1,4 +1,4 @@
-package com.workintech.library.models;
+package com.workintech.library.entities;
 
 public class Member {
     private long id;

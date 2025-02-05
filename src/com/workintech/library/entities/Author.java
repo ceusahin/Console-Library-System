@@ -1,4 +1,4 @@
-package com.workintech.library.models;
+package com.workintech.library.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,24 @@ public class Author {
         this.books = new ArrayList<>();
     }
 
-    public void addBook(Book book) {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void addBookToAuthor(Book book) {
         books.add(book);
     }
 
     public List<Book> getBooks() {
         return books;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
