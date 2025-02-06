@@ -27,23 +27,27 @@ public class Book implements BookOptions {
 
     @Override
     public void borrowBook(Member user) {
-        if(user.canBorrow()) {
+        if (user.canBorrow(this)) {
             this.status = BookStatus.BORROWED;
             this.owner = user;
-            user.borrowBook();
-            System.out.println(user.name + " borrowed this book: " + this.name);
+            user.getBorrowedBooks().add(this);
+            user.setBorrowedBooksNum(user.getBorrowedBooksNum() + 1);
+            System.out.println(user.getName() + " borrowed this book: " + this.name);
         } else {
-            System.out.println(user.name + "can't borrow this book: " + this.name);
+            System.out.println(user.getName() + " can't borrow this book: " + this.name);
         }
     }
 
     @Override
     public void returnBook() {
-        if (status == BookStatus.BORROWED) {
-            owner.returnBook();
+        if (status == BookStatus.BORROWED && owner != null) {
+            owner.getBorrowedBooks().remove(this);
+            owner.setBorrowedBooksNum(owner.getBorrowedBooksNum() - 1);
+            System.out.println(owner.getName() + " returned the book: " + this.name);
             owner = null;
             status = BookStatus.AVAILABLE;
-            System.out.println("The book is returned: " + this.name);
+        } else {
+            System.out.println("This book is not borrowed or has no owner.");
         }
     }
 
@@ -108,7 +112,7 @@ public class Book implements BookOptions {
                 ", status = " + status +
                 ", category = " + category +
                 ", dateOfPurchase = " + dateOfPurchase +
-                ", owner = " + owner +
+                ", owner = " + owner.getName() +
                 '}';
     }
 }

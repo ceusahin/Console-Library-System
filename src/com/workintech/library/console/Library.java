@@ -24,6 +24,7 @@ public class Library {
 
         while (true){
             if(currentUser == null) {
+                System.out.println("--------------------------");
                 System.out.println("Welcome to CEU Library.");
                 System.out.println("Please choose an option.");
                 System.out.println("1- Register (Sign Up)");
@@ -41,7 +42,9 @@ public class Library {
                         loginMember();
                         break;
                     case 3:
+                        System.out.println("--------------------------");
                         System.out.println("Exiting the library...");
+                        System.out.println("--------------------------");
                         return;
                     case 4:
                         verifyMember.displayMembers();
@@ -50,14 +53,18 @@ public class Library {
                         System.out.println("Invalid option. Please try again.");
                 }
             } else {
+                System.out.println("--------------------------");
                 System.out.println("Welcome to CEU Library.");
                 System.out.println("Please choose an option.");
                 System.out.println("1-  ADD NEW BOOK"); // +
                 System.out.println("2-  FIND A BOOK"); // +
-                System.out.println("3-  UPDATE BOOK INFOS"); // +
-                System.out.println("4-  REMOVE A BOOK"); // +
-                System.out.println("5-  LIST ALL BOOKS"); // +
-                System.out.println("6-  EXIT THE LIBRARY"); // +
+                System.out.println("3-  BORROW A BOOK"); // +
+                System.out.println("4-  RETURN A BOOK"); // +
+                System.out.println("5-  UPDATE BOOK INFOS"); // +
+                System.out.println("6-  REMOVE A BOOK"); // +
+                System.out.println("7-  LIST ALL BOOKS"); // +
+                System.out.println("8-  LIST ALL BOOKS U BORROWED"); // +
+                System.out.println("9-  EXIT THE LIBRARY"); // +
 
                 inp = input.nextInt();
                 input.nextLine();
@@ -108,8 +115,6 @@ public class Library {
 
                         bookList.addBook(book, author);
                         System.out.println("Book added successfully.");
-
-                        System.out.println("--------------------------");
                         break;
                     case 2:
                         // id name ve author'a göre kitap seçilecek.
@@ -140,10 +145,27 @@ public class Library {
                                 bookList.displayBooksByAuthor(author2);
                                 break;
                         }
-
-                        System.out.println("--------------------------");
                         break;
+
                     case 3:
+                        System.out.println("Enter the ID number of the book you want to borrow.");
+                        long inpCaseBorrow = input.nextInt();
+                        Book borrowedBook = bookList.searchById(inpCaseBorrow);
+                        if (borrowedBook == null) {
+                            System.out.println("There is no book with entered ID.");
+                            break;
+                        }
+                        borrowedBook.borrowBook(currentUser);
+                        break;
+
+                    case 4:
+                        System.out.println("Enter the ID number of the book you want to return.");
+                        long inpCaseReturn = input.nextInt();
+                        Book returnedBook = bookList.searchById(inpCaseReturn);
+                        returnedBook.returnBook();
+                        break;
+
+                    case 5:
                         System.out.println("Enter the ID number of the book you want to update.");
                         long inpCase3Id = input.nextInt();
 
@@ -210,9 +232,8 @@ public class Library {
                         }
 
 
-                        System.out.println("--------------------------");
                         break;
-                    case 4:
+                    case 6:
                         // remove a book
                         System.out.println("Enter the ID of the book you want to remove.");
 
@@ -221,9 +242,8 @@ public class Library {
 
                         bookList.removeBookById(inpCase4);
 
-                        System.out.println("--------------------------");
                         break;
-                    case 5:
+                    case 7:
                         // list all books by author, list all books by categories
                         System.out.println("Which option do you want to list the books by?");
                         System.out.println("1-  List all books by category.");
@@ -270,14 +290,26 @@ public class Library {
                                 break;
                         }
 
-                        System.out.println("--------------------------");
                         break;
-                    case 6:
+                    case 8:
+                        System.out.println("Books You Have Borrowed:");
+                        System.out.println("---------------------------------------------------------------------");
+                        System.out.printf("| %-25s | %-20s | %-10s | %-15s |\n", "Name", "Author", "Price", "Owner");
+                        System.out.println("---------------------------------------------------------------------");
+
+                        for (Book bookUser : currentUser.getBorrowedBooks()) {
+                            System.out.printf("| %-25s | %-20s | %-10.2f | %-15s |\n",
+                                    bookUser.getName(), bookUser.getAuthor().getName(), bookUser.getPrice(), bookUser.getOwner().getName());
+                        }
+
+                        System.out.println("---------------------------------------------------------------------");
+
+                        break;
+                    case 9:
                         System.out.println("--------------------------");
                         System.out.println("Logging out...");
-                        System.out.println("--------------------------");
                         currentUser = null;
-                        return;
+                        break;
                 }
             }
 
@@ -288,7 +320,6 @@ public class Library {
     public static void registerMember() {
         Scanner input = new Scanner(System.in);
 
-        int userId = 1;
         System.out.println("Enter your name: ");
         String name = input.nextLine();
 
@@ -301,12 +332,13 @@ public class Library {
         int type = input.nextInt();
 
         Member newMember = null;
+
+        int userId = members.size() + 1;
+
         if (type == 1) {
             newMember = new Student(userId, name, password);
-            userId++;
         } else if (type == 2) {
             newMember = new Faculty(userId, name, password);
-            userId++;
         } else {
             System.out.println("Invalid member type.");
             return;
@@ -346,4 +378,5 @@ public class Library {
         }
         return null;
     }
+
 }

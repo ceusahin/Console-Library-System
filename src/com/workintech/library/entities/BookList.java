@@ -98,7 +98,7 @@ public class BookList {
         if (booksByAuthor != null && !booksByAuthor.isEmpty()) {
             System.out.println("Author's books: ");
             for (Book book : booksByAuthor) {
-                System.out.println("ID: " + booksByAuthor.indexOf(book) + " - Book: " + book.getName());
+                System.out.println("ID: " + (booksByAuthor.indexOf(book) + 1) + " - Book: " + book.getName());
             }
 
             System.out.print("Please choose an ID: ");

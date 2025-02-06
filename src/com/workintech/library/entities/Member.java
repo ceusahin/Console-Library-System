@@ -1,18 +1,25 @@
 package com.workintech.library.entities;
 
+import com.workintech.library.enums.BookStatus;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Member {
     private long id;
     String name;
     String password;
-    private int borrowedBooks;
+    private int borrowedBooksNum;
     protected final int MAX_BOOKS;
+    private List<Book> borrowedBooks;
 
     public Member(long id, String name, String password) {
         this.id = id;
         this.name = name;
         this.password = password;
-        this.borrowedBooks = 0;
+        this.borrowedBooksNum = 0;
         this.MAX_BOOKS = 5;
+        this.borrowedBooks = new ArrayList<>();
     }
 
     public boolean verifyPassword (String inpPassword) {
@@ -31,21 +38,30 @@ public class Member {
         return password;
     }
 
-    public boolean canBorrow() {
-        return borrowedBooks < MAX_BOOKS;
+    @Override
+    public String toString() {
+        return "Member{" +
+                "borrowedBooks=" + borrowedBooks +
+                '}';
     }
 
-    public void borrowBook() {
-        if(canBorrow()) {
-            borrowedBooks++;
-        } else {
-            System.out.println("You have reached the maximum book borrowing limit.");
-        }
+    public int getBorrowedBooksNum() {
+        return borrowedBooksNum;
     }
 
-    public void returnBook() {
-        if (borrowedBooks > 0) {
-            borrowedBooks--;
-        }
+    public void setBorrowedBooksNum(int borrowedBooksNum) {
+        this.borrowedBooksNum = borrowedBooksNum;
+    }
+
+    public List<Book> getBorrowedBooks() {
+        return borrowedBooks;
+    }
+
+    public void setBorrowedBooks(List<Book> borrowedBooks) {
+        this.borrowedBooks = borrowedBooks;
+    }
+
+    public boolean canBorrow(Book book) {
+        return borrowedBooksNum < MAX_BOOKS && book.getStatus() == BookStatus.AVAILABLE;
     }
 }
